@@ -1,20 +1,41 @@
-import { LineChart, Line } from "recharts";
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { useParams } from 'react-router-dom';
+import { generateDates } from "./api/api";
+import Details from './details';
 
-export default function Chart(){
-    let data1 = {USDAED: Array(7) [ 3.672501, 3.672525, 3.672501, 3.622501, 3.692525, 4.672501 ]}
-    const data = [
-        { name: 'Page A', uv: 4000 },
-        { name: 'Page B', uv: 3000 },
-        { name: 'Page C', uv: 2000 },
-        { name: 'Page D' },
-        { name: 'Page E', uv: 1890 },
-        { name: 'Page F', uv: 2390 },
-        { name: 'Page G', uv: 3490 },
-      ];
+export default function Chart({groupedQuotes}){
+    let params = useParams();
+    let key = params.key;
+    let prices = groupedQuotes[key];
+    let timeFrame = prices.length;
+    let dates = generateDates(timeFrame);
+    console.log(prices, prices.length);
+    //console.log(groupedQuotes);
+    console.log(dates);
+    let data = [];
+    for (let i = 0; i < timeFrame; i++) {
+        data.push({price: parseFloat(prices[i].toFixed(2)), date: dates[i]});
+    }
+    //console.log(data);
     return (
         <>
-            <LineChart width={400} height={400} data={data}>
-                <Line type="monotone" dataKey="uv" stroke="#8884d8"/>
+            <LineChart
+            width={500}
+            height={300}
+            data={data}
+            margin={{
+                top: 5,
+                right: 30,
+                left: 20,
+                bottom: 5,
+            }}
+            >
+            <CartesianGrid strokeDasharray="3 3" strokeWidth={8}/>
+            <XAxis dataKey="date" />
+            <YAxis type="number" scale="log" domain={['auto', 'auto']} />
+            <Tooltip />
+            <Legend />
+            <Line type="monotone" dataKey="price" stroke="#8884d8" activeDot={{ r: 8 }} strokeWidth={4} />
             </LineChart>
         </>
     )

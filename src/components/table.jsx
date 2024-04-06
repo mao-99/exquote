@@ -4,8 +4,12 @@ import styles from "./table.module.css"
 import axios from "axios";
 import { useState, useEffect } from "react";
 import Chart from './chart';
+import Details from './details';
 import { Outlet } from 'react-router-dom';
-export default function Table(){
+import { Link } from 'react-router-dom';
+
+
+export default function Table({  setLayoutGroupedQuotes}){
     const [timeFrame, setTimeFrame] = useState(7);
     const [quotes, setQuotes] = useState({});
     const [tempQuotes, setTempQuotes] = useState({});
@@ -50,11 +54,12 @@ export default function Table(){
                     })
                 })
                 setGroupedQuotes(updatedGroupedQuotes);
+                setLayoutGroupedQuotes(updatedGroupedQuotes);
             }
             updateGroupedQuotes();
         }
         updateQuotesAndHistorical();
-    },[timeFrame])
+    },[timeFrame, setLayoutGroupedQuotes])
     const [formData, setFormData] = useState({searchCurrency: ''});
     
     const handleChange = (e) => {
@@ -114,77 +119,71 @@ export default function Table(){
     }, null);
     return (
         <>
-        <div className="tableDiv">
-            <div className={`${styles.currencies}`}>
-                <div className={`${styles.currency}`} onClick={() => {setTimeFrame(1)}}>
-                    <p>1 day</p>
+            <div className="tableDiv">
+                <div className={`${styles.currencies}`}>
+                    <div className={`${styles.currency}`} onClick={() => {setTimeFrame(1)}}>
+                        <p>1 day</p>
+                    </div>
+                    <div className={`${styles.currency}`} onClick={() => {setTimeFrame(2)}}>
+                        <p>2 days</p>
+                    </div>
+                    <div className={`${styles.currency}`} onClick={() => {setTimeFrame(3)}}>
+                        <p>3 days</p>
+                    </div>
+                    <div className={`${styles.currency}`} onClick={() => {setTimeFrame(5)}}>
+                        <p>5 days</p>
+                    </div>
+                    <div className={`${styles.currency}`} onClick={() => {setTimeFrame(7)}}>
+                        <p>7 days</p>
+                    </div>
                 </div>
-                <div className={`${styles.currency}`} onClick={() => {setTimeFrame(2)}}>
-                    <p>2 days</p>
+                <div>
+                    <form onSubmit={handleSubmit}>
+                        <input type="text" name="searchCurrency" id="searchCurrency" value={formData.searchCurrency} onChange={handleChange}/>
+                        <input type="submit" value="Search" />
+                    </form>
                 </div>
-                <div className={`${styles.currency}`} onClick={() => {setTimeFrame(3)}}>
-                    <p>3 days</p>
-                </div>
-                <div className={`${styles.currency}`} onClick={() => {setTimeFrame(5)}}>
-                    <p>5 days</p>
-                </div>
-                <div className={`${styles.currency}`} onClick={() => {setTimeFrame(7)}}>
-                    <p>7 days</p>
-                </div>
+                <table className="table table-rounded table-striped table-hover table-bordered caption-top">
+                    <caption>
+                        The <strong><em>live rate</em></strong> tells us how much of the other currency 1 <strong><em>USD</em></strong> is worth <br/>
+                        <strong>Total # of Quotes :</strong> {Object.keys(quotes).length}  <br/>
+                        <strong>Max Pair :</strong> {maxPair && `${maxPair[0]}: ${maxPair[1]}`} <br/>
+                        <strong>Min Pair :</strong> {minPair && `${minPair[0]}: ${minPair[1]}`}
+                    </caption>
+                    <thead className="table-dark table-group-divider">
+                        <tr>
+                            <th>Currency</th>
+                            <th>Live Rate <em>(1 USD equals...)</em></th>
+                            <th>Historical Rates
+                                <table style={{width:'100%'}}><thead><tr><th>Max</th><th>Average</th><th>Min</th></tr></thead></table>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {
+                            Object.entries(quotes).map(([key, value], index) => {
+                                return (
+                                    <tr key={index}>
+                                    <td><Link to={`/${key}`}>{key.slice(3)}</Link></td>
+                                    <td>{value}</td>
+                                    <td>
+                                        <table className='table-bordered table-hover' style={{width:'100%'}}>
+                                            <tbody>
+                                                <tr>
+                                                    <td>{maxValues[key]}</td>
+                                                    <td>{averageValues[key]}</td>
+                                                    <td>{minValues[key]}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        </td> 
+                                    </tr>
+                                )
+                            })
+                        }
+                    </tbody>
+                </table>
             </div>
-            <div>
-                <form onSubmit={handleSubmit}>
-                    <input type="text" name="searchCurrency" id="searchCurrency" value={formData.searchCurrency} onChange={handleChange}/>
-                    <input type="submit" value="Search" />
-                </form>
-            </div>
-            <table className="table table-rounded table-striped table-hover table-bordered caption-top">
-                <caption>
-                    The <strong><em>live rate</em></strong> tells us how much of the other currency 1 <strong><em>USD</em></strong> is worth <br/>
-                    <strong>Total # of Quotes :</strong> {Object.keys(quotes).length}  <br/>
-                    <strong>Max Pair :</strong> {maxPair && `${maxPair[0]}: ${maxPair[1]}`} <br/>
-                    <strong>Min Pair :</strong> {minPair && `${minPair[0]}: ${minPair[1]}`}
-                </caption>
-                <thead className="table-dark table-group-divider">
-                    <tr>
-                        <th>Currency</th>
-                        <th>Live Rate <em>(1 USD equals...)</em></th>
-                        <th>Historical Rates
-                            <table style={{width:'100%'}}><thead><tr><th>Max</th><th>Average</th><th>Min</th></tr></thead></table>
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {
-                        Object.entries(quotes).map(([key, value], index) => {
-                            return (
-                                <tr key={index}>
-                                  <td>{key.slice(3)}</td>
-                                  <td>{value}</td>
-                                  <td>
-                                    <table className='table-bordered table-hover' style={{width:'100%'}}>
-                                        <tbody>
-                                            <tr>
-                                                <td>{maxValues[key]}</td>
-                                                <td>{averageValues[key]}</td>
-                                                <td>{minValues[key]}</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                    </td> 
-                                </tr>
-                            )
-                        })
-                    }
-                </tbody>
-            </table>
-        </div>
-        <Router>
-            <Routes>
-                <Route path='/chart' element={<Chart/>}/>
-            </Routes>
-        </Router>
-        <Outlet />
         </>
     )
 }
