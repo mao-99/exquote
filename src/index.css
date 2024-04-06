@@ -78,6 +78,10 @@ body{
   width: 20vw;
 }
 
+#indexLink{
+  margin: 1rem auto;
+}
+
 .table{
   table-layout: auto;
   width: 100%;

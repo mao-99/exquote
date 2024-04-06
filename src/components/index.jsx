@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react"
-import { fetchData } from "./api/api"
-import axios from "axios"
+
+import { useState } from "react";
+import { Link } from "react-router-dom";
 export default function Index() {
     // const [allCurrencies, setAllCurrencies] = useState([])
     // useEffect(() => {
@@ -18,7 +18,7 @@ export default function Index() {
     //         value: allCurrencies[key]
     //     };
     //     });
-
+    const [showCurrencies, setShowCurrencies] = useState(false);
     const mappedArray = [
         {
             "key": "AED",
@@ -709,10 +709,25 @@ export default function Index() {
     return (
         <>
         <div className="index">
-            <h2>Currency Index</h2>
-            {mappedArray.map((currency, index) => {
-                return (<div key={index} className="currencyRow"><strong>{currency.key} : </strong>{currency.value}</div>)
-            })}
+            <h3>Index</h3>
+            <Link to='/'>  
+                <button className="btn btn-secondary" type="button" id="indexLink">Home</button>
+            </Link>
+            <Link to='/'>
+                <button className="btn btn-secondary" type="button" id="indexLink">Search</button>
+            </Link>
+            <div className="dropdown">
+
+                <button className="btn btn-secondary dropdown-toggle" type="button" onClick={()=>{setShowCurrencies(!showCurrencies)}} id="indexLink">
+                    Show Currencies
+                </button>
+                <div>
+                    {showCurrencies && mappedArray.map((currency, index) => {
+                    return (<div key={index} className="currencyRow"><strong>{currency.key} : </strong>{currency.value}</div>)
+                })}
+                </div>
+            </div>
+
         </div>
         </>
     )

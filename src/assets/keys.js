@@ -1,3 +1,3 @@
-export const exchangeRateHost_apiKey = '';
+export const exchangeRateHost_apiKey = 'baa87b85a229d9cbbb5a4e94621f4a27';
 
 const colors = ['#e9f2f1', '#f3eeed', '#fcf7f5', '#cf463f', '#756c6b', '#3e323c', '#c9dad5', '#ddd5d0']
