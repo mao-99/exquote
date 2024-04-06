@@ -28,14 +28,14 @@ The following **additional** features are implemented:
 
 Here's a walkthrough of implemented user stories:
 
-<img src='https://imgur.com/VBTLMWv.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+<img src='https://imgur.com/U2EiCTd.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
 
 <!-- Replace this with whatever GIF tool you used! -->
 GIF created with ScreenToGif (https://www.screentogif.com/) for Windows
 
 ## Notes
 
-Implementing the routes were tricky, but I was able to figure it out. I created the routes inside the layout component. For the full table, I routed to the home '/' path. And for the detailed pages, I used dynamic routing to append the currency pair key to the home path. (e.g localhost:5173/USDAED)
+Implementing the routes was tricky, but I was able to figure it out. I created the routes inside the layout component. For the full table, I routed to the home '/' path. And for the detailed pages, I used dynamic routing to append the currency pair key to the home path. (e.g localhost:5173/USDAED)
 
 ## License
 
