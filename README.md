@@ -1,4 +1,4 @@
-# Web Development Project 6 - ExQuote
+# ExQuote
 
 Submitted by: Mubarak Odufade
 
